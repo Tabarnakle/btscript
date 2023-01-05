@@ -76,7 +76,7 @@ async function getBfAccId() {
   }
 }
 
-// query BF api to obtain latest sub id
+// query BF api to obtain latest active sub id 
 async function getSubId() {
   const bfId = await getBfAccId()
   const bfUrl = 'https://app.billforward.net:443/v1/subscriptions/account/' + bfId
@@ -84,8 +84,11 @@ async function getSubId() {
     const response = await axios.get(bfUrl, {
       headers: { 'Authorization': `Bearer ${BF_TOKEN}` }
     })
-    const subId = response.data.results[0].id;
-    return subId
+    const bfSubs = response.data.results
+    const activeSub = bfSubs.filter(obj => {
+      return obj.active == true
+    })
+    return activeSub[0].id
   } catch (error) {
     console.log(error);
   }
