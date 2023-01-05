@@ -7,6 +7,7 @@ require('dotenv').config()
 
 const BF_TOKEN = process.env.BF_TOKEN
 
+// command line arguments
 program
   .arguments('<org>')
   .option('-o, --owner <owner>', 'Docker ID for the owner')
@@ -28,6 +29,7 @@ const orgName = program.args
 const ownerName = program.opts().owner
 const contractStartDate = program.opts().date
 const provisionSeats = program.opts().seats
+
 // bt base command
 const btCommand = 'docker run --rm -e BT_DOCKER_AUTH_TOKEN -e BT_DOCKER_ENVIRONMENT docker/bt:latest'
 
