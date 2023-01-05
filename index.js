@@ -3,8 +3,9 @@ const { program } = require('commander')
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const axios = require('axios')
+require('dotenv').config()
 
-const BF_TOKEN = 'GMKt1xqQpDM5PmxzPbsYwO3OJu0'
+const BF_TOKEN = process.env.BF_TOKEN
 
 program
   .arguments('<org>')
