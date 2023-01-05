@@ -3,9 +3,14 @@ const { program } = require('commander')
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const axios = require('axios')
-require('dotenv').config()
 
-const BF_TOKEN = process.env.BF_TOKEN
+require('dotenv').config({ 
+  debug : true, 
+  path : __dirname + '/.env'
+})
+console.log(process.env.BILLFORWARD_TOKEN)
+
+const BF_TOKEN = process.env.BILLFORWARD_TOKEN
 
 // command line arguments
 program
