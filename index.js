@@ -7,7 +7,6 @@ const axios = require('axios')
 require('dotenv').config({ 
   path : __dirname + '/.env'
 })
-console.log(process.env.BILLFORWARD_TOKEN)
 
 const BF_TOKEN = process.env.BILLFORWARD_TOKEN
 
