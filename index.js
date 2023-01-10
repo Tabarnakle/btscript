@@ -79,7 +79,7 @@ async function getBfAccId() {
 // query BF api to obtain latest active sub id 
 async function getSubId() {
   const bfId = await getBfAccId()
-  const bfUrl = 'https://app.billforward.net:443/v1/subscriptions/account/' + bfId
+  const bfUrl = `https://app.billforward.net:443/v1/subscriptions/account/${bfId}?results=20`
   try {
     const response = await axios.get(bfUrl, {
       headers: { 'Authorization': `Bearer ${BF_TOKEN}` }
