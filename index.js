@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 const { program } = require('commander')
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
 const axios = require('axios')
+const { btAccount, getBfAccId, btSubscription } = require('./btCalls')
 
-require('dotenv').config({ 
-  path : __dirname + '/.env'
+require('dotenv').config({
+  path: __dirname + '/.env'
 })
 
 const BF_TOKEN = process.env.BILLFORWARD_TOKEN
@@ -33,27 +32,6 @@ const ownerName = program.opts().owner
 const contractStartDate = program.opts().date
 const provisionSeats = program.opts().seats
 
-// bt base command
-const btCommand = 'docker run --rm -e BT_DOCKER_AUTH_TOKEN -e BT_DOCKER_ENVIRONMENT docker/bt:latest'
-
-// bt account lookup to get json data
-async function btAccount() {
-  try {
-    const { stdout, stderr } = await exec(`${btCommand} account lookup ${orgName} | sed '1,5d' | jq '.'`);
-    return JSON.parse(stdout);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function btSubscription() {
-  try {
-    const { stdout, stderr } = await exec(`${btCommand} subscription list ${orgName} | jq '.'`);
-    return JSON.parse(stdout);
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 // check if owner given in command exists in array of owners provided by bt
 function isOwner(ownersArray) {
@@ -66,19 +44,9 @@ function isOwner(ownersArray) {
   return isOwner
 }
 
-// bt account lookup to get BF account id
-async function getBfAccId() {
-  try {
-    const { stdout, stderr } = await exec(`${btCommand} account lookup ${orgName} | grep -o -P '.{0}ACC.{0,33}'`);
-    return stdout;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 // query BF api to obtain latest active sub id 
 async function getSubId() {
-  const bfId = await getBfAccId()
+  const bfId = await getBfAccId(orgName)
   const bfUrl = `https://app.billforward.net:443/v1/subscriptions/account/${bfId}?records=20`
   try {
     const response = await axios.get(bfUrl, {
@@ -95,7 +63,7 @@ async function getSubId() {
 }
 
 async function makeTemplate() {
-  const btResponse = await Promise.all([btAccount(), btSubscription()])
+  const btResponse = await Promise.all([btAccount(orgName), btSubscription(orgName)])
   const currentSub = btResponse[1][0].name
   const owners = btResponse[0].owners
   const subData = btResponse[1][0]
