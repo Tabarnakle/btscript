@@ -25,7 +25,7 @@ nvm install --lts
 ```
 3. Clone the repo
 ```
-git@github.com:Tabarnakle/btscript.git && cd btscript
+git clone git@github.com:Tabarnakle/btscript.git && cd btscript
 ```
 4. Install globally with npm
 ```
