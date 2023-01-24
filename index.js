@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { program } = require('commander')
-const axios = require('axios')
-const { btAccount, getBfAccId, btSubscription } = require('./btCalls')
+const { btAccount, btSubscription, getBfAccId } = require('./btCalls')
+const { getSubId } = require('./apiCalls')
 
 require('dotenv').config({
   path: __dirname + '/.env'
@@ -32,7 +32,6 @@ const ownerName = program.opts().owner
 const contractStartDate = program.opts().date
 const provisionSeats = program.opts().seats
 
-
 // check if owner given in command exists in array of owners provided by bt
 function isOwner(ownersArray) {
   let isOwner = false
@@ -44,31 +43,14 @@ function isOwner(ownersArray) {
   return isOwner
 }
 
-// query BF api to obtain latest active sub id 
-async function getSubId() {
-  const bfId = await getBfAccId(orgName)
-  const bfUrl = `https://app.billforward.net:443/v1/subscriptions/account/${bfId}?records=20`
-  try {
-    const response = await axios.get(bfUrl, {
-      headers: { 'Authorization': `Bearer ${BF_TOKEN}` }
-    })
-    const bfSubs = response.data.results
-    const activeSub = bfSubs.filter(obj => {
-      return obj.active == true
-    })
-    return activeSub[0].id
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 async function makeTemplate() {
   const btResponse = await Promise.all([btAccount(orgName), btSubscription(orgName)])
   const currentSub = btResponse[1][0].name
   const owners = btResponse[0].owners
   const subData = btResponse[1][0]
   const currentSeats = subData.pricing_components[0].value
-  const subId = await getSubId()
+  const bfId = await getBfAccId(orgName)
+  const subId = await getSubId(bfId, BF_TOKEN)
   const subUrl = 'https://app.billforward.net/#/subscriptions/view/' + subId
   console.log(' ');
   console.log(`'${orgName}' org exists`);
