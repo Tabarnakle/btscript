@@ -45,21 +45,40 @@ function isOwner(ownersArray) {
 
 async function makeTemplate() {
   const btResponse = await Promise.all([btAccount(orgName), btSubscription(orgName)])
-  const currentSub = btResponse[1][0].name
   const owners = btResponse[0].owners
-  const subData = btResponse[1][0]
-  const currentSeats = subData.pricing_components[0].value
   const bfId = await getBfAccId(orgName)
-  const subId = await getSubId(bfId, BF_TOKEN)
-  const subUrl = 'https://app.billforward.net/#/subscriptions/view/' + subId
+
+
+  let currentSub
+  let currentSeats
+  let subUrl
+
+
+  if (btResponse[1].length == 0) {
+    currentSub = []
+  } else {
+    const subData = btResponse[1][0]
+    currentSub = subData.name
+    currentSeats = subData.pricing_components[0].value
+    const subId = await getSubId(bfId, BF_TOKEN)
+    subUrl = 'https://app.billforward.net/#/subscriptions/view/' + subId
+  }
+
+
   console.log(' ');
   console.log(`'${orgName}' org exists`);
+
   if (isOwner(owners)) {
     console.log(`'${ownerName}' is part of the owners team`);
   } else {
     console.log(`'${ownerName}' is not part of the owners team`);
   }
-  console.log(`canceled ${currentSub} (${currentSeats} seats) subscription: ${subUrl}`);
+
+  if (currentSub.length == 0) {
+    console.log('no active subscriptions');
+  } else {
+    console.log(`canceled ${currentSub} (${currentSeats} seats) subscription: ${subUrl}`);    
+  }
   console.log(`provisioned Docker Business - Annual (${provisionSeats} seats) subscription: `);
   console.log(' ');
   console.log('# add provided owner to owners team');
