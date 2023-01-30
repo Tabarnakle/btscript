@@ -46,20 +46,20 @@ function isOwner(ownersArray) {
 async function makeTemplate() {
   const btResponse = await Promise.all([btAccount(orgName), btSubscription(orgName)])
   const owners = btResponse[0].owners
-  const bfId = await getBfAccId(orgName)
-
-
+  
+  
   let currentSub
   let currentSeats
   let subUrl
-
-
+  
+  
   if (btResponse[1].length == 0) {
     currentSub = []
   } else {
     const subData = btResponse[1][0]
     currentSub = subData.name
     currentSeats = subData.pricing_components[0].value
+    const bfId = await getBfAccId(orgName)
     const subId = await getSubId(bfId, BF_TOKEN)
     subUrl = 'https://app.billforward.net/#/subscriptions/view/' + subId
   }
