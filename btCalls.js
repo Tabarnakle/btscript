@@ -9,7 +9,8 @@ const btCalls = {
     btAccount: async function (orgName) {
         try {
             const { stdout, stderr } = await exec(`${btCommand} account lookup ${orgName} | sed '1,5d' | jq '.'`);
-            return JSON.parse(stdout);
+            const result = JSON.parse(stdout);
+            return result;
         } catch (e) {
             console.error(e);
         }
@@ -29,7 +30,8 @@ const btCalls = {
     btSubscription: async function (orgName) {
         try {
             const { stdout, stderr } = await exec(`${btCommand} subscription list ${orgName} | jq '.'`);
-            return JSON.parse(stdout);
+            const result = JSON.parse(stdout);
+            return result
         } catch (e) {
             console.error(e);
         }
