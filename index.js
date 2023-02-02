@@ -1,4 +1,28 @@
 #!/usr/bin/env node
+
+/* App should use a single object that encompases 
+all the CLI input,
+  - ticketType
+  - orgName
+  - orgOwner
+  - contractStartDate
+  - seatsAmount
+
+the methods for querying bt and BF API and the useful data received from them
+  btAccount{
+      owners array
+    }
+  btSubscriptionList{
+    name(currentSub),
+    pricing_components[0].value (seat amount)
+    current_period_end
+  }
+  getBfAccId{
+    BillForward ID (ACC-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX)
+  }
+  getSubId
+    active BF subscription ID
+ */
 const { program } = require('commander')
 const { btAccount, btSubscription, getBfAccId } = require('./btCalls')
 const { getSubId } = require('./apiCalls')
