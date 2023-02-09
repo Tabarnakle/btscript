@@ -1,11 +1,12 @@
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const axios = require('axios')
 
 
 class Query {
     constructor(ticketType, orgName, orgOwner, contractStartDate, seatsAmount) {
         this.ticketType = ticketType
-        this.orgName = orgName
+        this.orgName = orgName[0]
         this.orgOwner = orgOwner
         this.contractStartDate = contractStartDate
         this.seatsAmount = seatsAmount
@@ -17,7 +18,8 @@ class Query {
     currentSub
     currentSeats
     currentPeriodEnd
-    bfId
+    bfId = undefined
+    activeSubUrl
 
 
     // methods
@@ -31,41 +33,52 @@ class Query {
             console.error(e);
         }
     }
-    getBfAccId = async function () {
+    getBfAccId = async () => {
         try {
             const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName} | grep -o -P '.{0}ACC.{0,33}'`);
-            if (stdout) {
-                this.bfId = stdout
-            }
+            this.bfId = stdout
+            console.log('bfId: ', this.bfId);
             return stdout;
         } catch (e) {
             console.error(e);
         }
     }
-    btSubscription = async function () {
+    btSubscription = async () => {
         try {
             const { stdout, stderr } = await exec(`${this.btCommand} subscription list ${this.orgName} | jq '.'`);
-            const result = JSON.parse(stdout);
-            return result
+            if (stdout) {
+                const result = JSON.parse(stdout);
+                this.currentSub = result[0].name
+                this.currentSeats = result[0].pricing_components[0].value
+                this.currentPeriodEnd = result[0].current_period_end
+                return result
+            }
         } catch (e) {
             console.error(e);
         }
     }
-    getActiveSubId = async function () {
+    bfApiCall = async () => {
         try {
             const bfUrl = `https://app.billforward.net:443/v1/subscriptions/account/${this.bfId}?records=20`
             const response = await axios.get(bfUrl, {
                 headers: { 'Authorization': `Bearer ${this.BF_TOKEN}` }
             })
-            const bfSubs = response.data.results
-            const activeSub = bfSubs.filter(obj => {
+            return response
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    // this function depends on the other calls resolving first
+    getActiveSubId = async () => {
+        try {
+            const response = await this.bfApiCall()
+            const activeSub = await response.data.results.filter(obj => {
                 return obj.active == true
             })
-            return activeSub[0].id
+            this.activeSubUrl = 'https://app.billforward.net/#/subscriptions/view/' + activeSub[0].id
         } catch (error) {
             console.log(error);
         }
     }
 }
-
 module.exports = Query
