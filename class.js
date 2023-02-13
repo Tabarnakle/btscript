@@ -25,10 +25,13 @@ class Query {
     // methods
     btAccount = async () => {
         try {
-            const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName} | sed '1,5d' | jq '.'`);
-            const result = JSON.parse(stdout);
-            this.owners = result.owners
-            return result;
+            const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName}`);
+            if (stdout) {
+                const stdoutJSON = stdout.split('{', 1)
+                const result = JSON.parse(stdoutJSON)
+                this.owners = result.owners
+                return result;
+            }
         } catch (e) {
             console.error(e);
         }
