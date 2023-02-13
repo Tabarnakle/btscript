@@ -25,10 +25,9 @@ class Query {
     // methods
     btAccount = async () => {
         try {
-            const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName}`);
+            const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName} | sed '1, 5d'`);
             if (stdout) {
-                const stdoutJSON = stdout.split('{', 1)
-                const result = JSON.parse(stdoutJSON)
+                const result = JSON.parse(stdout)
                 this.owners = result.owners
                 return result;
             }
@@ -48,8 +47,8 @@ class Query {
     }
     btSubscription = async () => {
         try {
-            const { stdout, stderr } = await exec(`${this.btCommand} subscription list ${this.orgName} | jq '.'`);
-            if (stdout) {
+            const { stdout, stderr } = await exec(`${this.btCommand} subscription list ${this.orgName}`);
+            if (stdout.length > 3) {
                 const result = JSON.parse(stdout);
                 this.currentSub = result[0].name
                 this.currentSeats = result[0].pricing_components[0].value
@@ -78,7 +77,9 @@ class Query {
             const activeSub = await response.data.results.filter(obj => {
                 return obj.active == true
             })
-            this.activeSubUrl = 'https://app.billforward.net/#/subscriptions/view/' + activeSub[0].id
+            if (activeSub.length > 0) {
+                this.activeSubUrl = 'https://app.billforward.net/#/subscriptions/view/' + activeSub[0].id
+            }
         } catch (error) {
             console.log(error);
         }
