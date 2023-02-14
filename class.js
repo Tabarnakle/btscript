@@ -9,7 +9,7 @@ class Query {
         this.orgName = orgName[0]
         this.orgOwner = orgOwner
         this.contractStartDate = contractStartDate
-        this.seatsAmount = seatsAmount
+        this.seatsAmount = parseInt(seatsAmount)
     }
     // fields
     btCommand = 'docker run --rm -e BT_DOCKER_AUTH_TOKEN -e BT_DOCKER_ENVIRONMENT docker/bt:latest'
