@@ -2,6 +2,7 @@
 
 const { program } = require('commander')
 const Query = require('./class')
+const makeTemplate = require('./template')
 
 require('dotenv').config({
   path: __dirname + '/.env'
@@ -27,11 +28,14 @@ program.parse(process.argv)
 // User Input
 const mainQuery = new Query(program.opts().type, program.args, program.opts().owner, program.opts().date, program.opts().seats)
 
-
+// run all calls
 Promise.all([
   mainQuery.btAccount(),
   mainQuery.getBfAccId(),
   mainQuery.btSubscription()])
   .then(() => mainQuery.getActiveSubId())
   .then(() => console.log('mainQuery: ', mainQuery))
+  .then(() => makeTemplate(mainQuery))
+
+
 
