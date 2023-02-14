@@ -34,7 +34,6 @@ Promise.all([
   mainQuery.getBfAccId(),
   mainQuery.btSubscription()])
   .then(() => mainQuery.getActiveSubId())
-  .then(() => console.log('mainQuery: ', mainQuery))
   .then(() => makeTemplate(mainQuery))
 
 
