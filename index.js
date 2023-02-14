@@ -1,38 +1,11 @@
 #!/usr/bin/env node
 
-/* App should use a single object that encompases 
-all the CLI input,
-  - ticketType x
-  - orgName x
-  - orgOwner x
-  - contractStartDate x
-  - seatsAmount x
-
-the methods for querying bt and BF API and the useful data received from them
-  btAccount{
-      owners array x
-    }
-  btSubscriptionList{
-    name(currentSub),
-    pricing_components[0].value (seat amount / currentSeats)
-    current_period_end
-  }
-  getBfAccId{
-    BillForward ID (ACC-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX) x
-  }
-  getSubId
-    active BF subscription ID
- */
 const { program } = require('commander')
-const { btAccount, btSubscription, getBfAccId } = require('./btCalls')
-const { getSubId } = require('./apiCalls')
 const Query = require('./class')
 
 require('dotenv').config({
   path: __dirname + '/.env'
 })
-
-const BF_TOKEN = process.env.BILLFORWARD_TOKEN
 
 // command line arguments
 program
@@ -48,7 +21,6 @@ program
 if (process.argv.length < 3) {
   program.help()
 }
-
 program.parse(process.argv)
 
 
