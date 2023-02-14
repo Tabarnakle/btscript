@@ -35,8 +35,8 @@ npm install -g
 ```
 btscript orgName -o <owner> -d <yyyy-mm-dd> -s <amount>
 ```
-This tool accepts one obligatory argument (orgName) and up to 3 different options
-
--o, --owner <owner>', 'Docker ID for the owner'
--d, --date <yyyy-mm-dd>', 'Contract start date'
--s, --seats <amount>', 'Amount of seats to provision'
+This tool accepts one obligatory argument (orgName) and up to 4 different options:
+-t, --type <ticketType>, 'New Business is default, other options are upsell and renewal'
+-o, --owner <owner>, 'Docker ID for the owner'
+-d, --date <yyyy-mm-dd>, 'Contract start date'
+-s, --seats <amount>, 'Amount of seats to provision'
