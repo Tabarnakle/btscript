@@ -52,7 +52,7 @@ class Query {
                 const result = JSON.parse(stdout);
                 this.currentSub = result[0].name
                 this.currentSeats = result[0].pricing_components[0].value
-                this.currentPeriodEnd = result[0].current_period_end
+                this.currentPeriodEnd = result[0].current_period_end.slice(0,10)
                 return result
             }
         } catch (e) {
