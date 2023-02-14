@@ -39,7 +39,6 @@ class Query {
         try {
             const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName} | grep -o -P '.{0}ACC.{0,33}'`);
             this.bfId = stdout
-            console.log('bfId: ', this.bfId);
             return stdout;
         } catch (e) {
             console.error(e);
