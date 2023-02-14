@@ -35,6 +35,3 @@ Promise.all([
   mainQuery.btSubscription()])
   .then(() => mainQuery.getActiveSubId())
   .then(() => makeTemplate(mainQuery))
-
-
-
