@@ -21,7 +21,7 @@ async function makeTemplate(query) {
 	}
 
 	// check for active subscriptions
-	if (query.currentSub.length == 0) {
+	if (query.currentSub == undefined || query.currentSub.length == 0) {
 		console.log('no active subscriptions');
 	}else {
 		console.log(`current ${query.currentSub} (${query.currentSeats} seats) subscription: ${query.activeSubUrl}`);
