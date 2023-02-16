@@ -33,7 +33,7 @@ npm link
 ```
 ## Syntax
 ```
-btscript orgName -o <owner> -d <yyyy-mm-dd> -s <amount>
+btscript orgName -o <owner> -d <yyyy-mm-dd> -s <amount> -t <ticketType>
 ```
 This tool accepts one obligatory argument (orgName) and up to 4 different options:
 
