@@ -38,8 +38,10 @@ class Query {
     getBfAccId = async () => {
         try {
             const { stdout, stderr } = await exec(`${this.btCommand} account lookup ${this.orgName} | grep -o -P '.{0}ACC.{0,33}'`);
-            this.bfId = stdout
-            return stdout;
+            if (stdout) {
+                this.bfId = stdout
+                return stdout;
+            }
         } catch (e) {
             console.error(e);
         }
