@@ -41,6 +41,8 @@ async function makeTemplate(query) {
 				console.log('');
 				console.log(`>>> Schedule ${query.seatsAmount - query.currentSeats} seat increase on renewal`);
 				console.log(`Not yet available through bt`);
+				console.log(`>>> Add ${query.seatsAmount - query.currentSeats} seats to ${query.orgName}`);
+				console.log(`bt billing plans add-seats ${query.orgName} ${query.seatsAmount - query.currentSeats}`);
 			} else {
 				console.log(`we will remove ${Math.abs(query.seatsAmount - query.currentSeats)} seats on renewal`);
 				console.log('');
