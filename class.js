@@ -43,7 +43,7 @@ class Query {
                 return stdout;
             }
         } catch (e) {
-            console.error(e);
+            console.error('ERROR: No BillForward ID available');
         }
     }
     btSubscription = async () => {
