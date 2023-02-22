@@ -14,6 +14,7 @@ class Query {
     // fields
     btCommand = 'docker run --rm -e BT_DOCKER_AUTH_TOKEN -e BT_DOCKER_ENVIRONMENT docker/bt:latest'
     BF_TOKEN = process.env.BILLFORWARD_TOKEN
+    orgExists = false
     owners
     currentSub
     currentSeats
@@ -29,10 +30,11 @@ class Query {
             if (stdout) {
                 const result = JSON.parse(stdout)
                 this.owners = result.owners
+                this.orgExists = true
                 return result;
             }
         } catch (e) {
-            console.error(e);
+            console.error('ERROR: Org/user not found');
         }
     }
     getBfAccId = async () => {
@@ -57,7 +59,7 @@ class Query {
                 return result
             }
         } catch (e) {
-            console.error(e);
+            console.error(e.stderr);
         }
     }
     bfApiCall = async () => {
