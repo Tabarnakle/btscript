@@ -27,7 +27,11 @@ nvm install --lts
 ```
 git clone git@github.com:Tabarnakle/btscript.git && cd btscript
 ```
-4. Add a symlink inside the btscript directory
+4. Install dependencies
+```
+npm install
+```
+5. Add a symlink inside the btscript directory
 ```
 npm link
 ```
