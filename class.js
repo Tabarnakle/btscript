@@ -34,7 +34,7 @@ class Query {
                 return result;
             }
         } catch (e) {
-            console.error('ERROR: Org/user not found');
+            console.error('ERROR: Org not found');
         }
     }
     getBfAccId = async () => {
@@ -59,7 +59,7 @@ class Query {
                 return result
             }
         } catch (e) {
-            console.error('ERROR: Org/user not found');
+            console.error('ERROR: Org not found');
         }
     }
     bfApiCall = async () => {
