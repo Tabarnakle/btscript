@@ -9,7 +9,7 @@ async function makeTemplate(query) {
 		return isOwner
 	}
 
-	// check if org exists (not really checking anything)
+	// check if org exists
 	if (query.orgExists) {
 		console.log(' ');
 		console.log(`'${query.orgName}' org exists`);
@@ -64,6 +64,15 @@ async function makeTemplate(query) {
 				break;
 		}
 		console.log('');
+	} else {
+		// if org doesn't exist
+		console.log('');
+		console.log(`>>> Create '${query.orgName}' org`);
+		console.log(`bt account create-org ${query.orgName} ${query.orgName}`);
+		console.log(`>>> Add '${query.orgOwner}' to owners group`);
+		console.log(`bt account add-user-to-group ${query.orgName} owners ${query.orgOwner}`);
+		console.log(`>>> Remove '${process.env.BT_DOCKER_ID}' from owners group`);
+		console.log(`bt account remove-user-from-group ${query.orgName} owners ${process.env.BT_DOCKER_ID}`);
 	}
 }
 
