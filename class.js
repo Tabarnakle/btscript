@@ -59,7 +59,7 @@ class Query {
                 return result
             }
         } catch (e) {
-            console.error(e.stderr);
+            console.error('ERROR: Org/user not found');
         }
     }
     bfApiCall = async () => {
